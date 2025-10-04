@@ -1,0 +1,72 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - nginx
+  - nodejs
+  - npm
+  - git
+  - mysql-client
+
+write_files:
+  - path: /etc/nginx/sites-available/epicbook
+    content: |
+      server {
+          listen 80;
+          server_name _;
+          
+          root /var/www/epicbook/frontend/dist;
+          index index.html;
+          
+          location / {
+              try_files $uri $uri/ /index.html;
+          }
+          
+          location /api {
+              proxy_pass http://localhost:5000;
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header Host $host;
+              proxy_cache_bypass $http_upgrade;
+          }
+      }
+  
+  - path: /opt/epicbook/.env
+    content: |
+      DB_HOST=${db_host}
+      DB_USER=${db_username}
+      DB_PASSWORD=${db_password}
+      DB_NAME=${db_name}
+      PORT=5000
+  
+  - path: /etc/systemd/system/epicbook.service
+    content: |
+      [Unit]
+      Description=EpicBook Backend
+      After=network.target
+      
+      [Service]
+      Type=simple
+      User=root
+      WorkingDirectory=/opt/epicbook/backend
+      EnvironmentFile=/opt/epicbook/.env
+      ExecStart=/usr/bin/node server.js
+      Restart=always
+      
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - rm /etc/nginx/sites-enabled/default
+  - ln -s /etc/nginx/sites-available/epicbook /etc/nginx/sites-enabled/
+  - git clone https://github.com/Dudubynatur3/theepicbook.git/opt/epicbook
+  - cd /opt/epicbook/backend && npm install
+  - cd /opt/epicbook/frontend && npm install && npm run build
+  - mkdir -p /var/www/epicbook
+  - cp -r /opt/epicbook/frontend/dist /var/www/epicbook/frontend/
+  - systemctl daemon-reload
+  - systemctl enable epicbook
+  - systemctl start epicbook
+  - systemctl restart nginx
