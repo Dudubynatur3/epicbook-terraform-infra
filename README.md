@@ -455,6 +455,6 @@ This project is available for educational and portfolio purposes.
 
 ---
 
-**Author:** Samuel Akintade  
+**Author:** Aduroja Akintade  
 **Project Type:** Cloud Infrastructure Portfolio Project  
 **Date:** October 2025
