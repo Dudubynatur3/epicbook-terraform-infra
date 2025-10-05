@@ -21,15 +21,15 @@ provider "azurerm" {
 locals {
   env_config = {
     dev = {
-      location    = "eastus"
+      location    = "northeurope"
       vm_size     = "Standard_B1s"
-      allowed_ip  = "85.76.119.90/32" 
+      allowed_ip  = "85.228.XXX.XXX/32" # replace with your PC public IP
       name_prefix = "dev"
     }
     prod = {
       location    = "westeurope"
       vm_size     = "Standard_B2s"
-      allowed_ip  = "85.76.119.90/32"
+      allowed_ip  = "85.228.XXX.XXX/32" # replace with your PC public IP
       name_prefix = "prod"
     }
   }

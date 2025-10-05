@@ -61,7 +61,7 @@ write_files:
 runcmd:
   - rm /etc/nginx/sites-enabled/default
   - ln -s /etc/nginx/sites-available/epicbook /etc/nginx/sites-enabled/
-  - git clone https://github.com/Dudubynatur3/theepicbook.git/opt/epicbook
+  - git clone https://github.com/Dudubynatur3/theepicbook.git /opt/epicbook
   - cd /opt/epicbook/backend && npm install
   - cd /opt/epicbook/frontend && npm install && npm run build
   - mkdir -p /var/www/epicbook

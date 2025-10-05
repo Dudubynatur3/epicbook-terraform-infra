@@ -17,7 +17,7 @@ resource "azurerm_mysql_flexible_server" "main" {
   location               = var.location
   administrator_login    = var.db_admin_username
   administrator_password = var.db_admin_password
-  sku_name               = "B_Standard_B1s"
+  sku_name               = "B_Standard_B1ms"
   version                = "8.0.21"
   
   delegated_subnet_id    = var.mysql_subnet_id
